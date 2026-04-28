@@ -41,5 +41,46 @@ async function loadMemes(){
 }
 
 async function handleAdd(){
-    const
+    const title = inputTitle.value.trim();
+    const category = inputCategory.value;
+    const rating = parseInt(inputRating.value);
+
+    errorMessage.textContent = "";
+    if (!title) {
+        errorMessage.textContent = "Введите название мема";
+        inputTitle.focus();
+        return;
+    }
+
+    btnAdd.disabled = true;
+    btnAdd.textContent = "Доставляем...";
+    try {
+        await addMeme(title, category, rating);
+        inputTitle.value = "";
+        await loadMemes();
+    } catch (error) {
+        errorMessage.textContent = error.message;
+    } finally {
+        btnAdd.disabled = false;
+        btnAdd.textContent = "Добавить";
+    }
 }
+
+async function handleDelete(id) {
+    if (!confirm("Удалить  этот мем?"))  return;
+    try {
+        await deleteMeme(id);
+        await loadMemes();
+    } catch (error) {
+        alert("Ошибка при удалении: " + error.message);
+    }
+}
+
+btnAdd.addEventListener("click", handleAdd);
+inputTitle.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        handleAdd();
+    }
+})
+
+loadMemes();
