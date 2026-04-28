@@ -67,7 +67,7 @@ async function handleAdd(){
 }
 
 async function handleDelete(id) {
-    if (!confirm("Удалить  этот мем?"))  return;
+    if (!confirm("Удалить этот мем?"))  return;
     try {
         await deleteMeme(id);
         await loadMemes();
